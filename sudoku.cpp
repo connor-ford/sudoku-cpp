@@ -36,6 +36,18 @@ void Sudoku::check(int x, int y, char init)
   }
 }
 
+void Sudoku::clear()
+{
+  for (int y = 0; y < 9; y++)
+  {
+    for (int x = 0; x < 9; x++)
+    {
+      board[y][x] = 0;
+      solves[y][x].clear();
+    }
+  }
+}
+
 void Sudoku::fill(int seed)
 {
   srand(seed);
@@ -79,18 +91,6 @@ void Sudoku::fill(int seed)
         solves[y][x].pop_front();
         board[y][x] = solves[y][x].front();
       }
-    }
-  }
-}
-
-void Sudoku::clear()
-{
-  for (int y = 0; y < 9; y++)
-  {
-    for (int x = 0; x < 9; x++)
-    {
-      board[y][x] = 0;
-      solves[y][x].clear();
     }
   }
 }
