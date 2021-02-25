@@ -2,6 +2,15 @@
 #include <iostream>
 #include "sudoku.h"
 
+Sudoku::Sudoku() {
+  for (int y = 0; y < 9; y++) {
+    for (int x = 0; x < 9; x++) {
+      board[y][x] = 0;
+      solves[y][x].clear();
+    }
+  }
+}
+
 void Sudoku::check(int x, int y, char init)
 {
   char c = init;
@@ -16,6 +25,7 @@ void Sudoku::check(int x, int y, char init)
       )
       {
         works = false;
+        break;
       }
     }
     if (works)
