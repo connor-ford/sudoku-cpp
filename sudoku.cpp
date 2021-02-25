@@ -95,17 +95,41 @@ void Sudoku::fill(int seed)
   }
 }
 
+void Sudoku::load(std::string puzzle)
+{
+  for (int i = 0; i < 81; i++)
+  {
+    board[i / 9][i % 9] = (puzzle[i] == '.' ? 0 : puzzle[i]);
+  }
+}
+
 std::string Sudoku::print()
 {
-  std::string s = "\n";
+  std::string s;
   for (int y = 0; y < 9; y++)
   {
     for (int x = 0; x < 9; x++)
     {
-      s += board[y][x];
+      s += (board[y][x] == 0 ? '.' : board[y][x]);
       s += (x % 3 == 2 && x != 8 ? "|" : "");
     }
     s += (y % 3 == 2 && y != 8 ? "\n---+---+---\n" : "\n");
   }
   return s;
+}
+
+bool Sudoku::validatePuzzle(std::string s)
+{
+  if (s.length() != 81)
+  {
+    return false;
+  }
+  for (char c : s)
+  {
+    if (validInput.find(c) == std::string::npos)
+    {
+      return false;
+    }
+  }
+  return true;
 }
