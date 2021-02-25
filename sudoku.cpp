@@ -17,8 +17,10 @@ Sudoku::Sudoku()
 void Sudoku::check(int x, int y, char init)
 {
   char c = init;
+  bool valid;
   for (int i = 0; i < 9; i++)
   {
+    valid = true;
     for (int j = 0; j < 9; j++)
     {
       if (board[y][j] == c                                          // Horizontal
@@ -26,11 +28,14 @@ void Sudoku::check(int x, int y, char init)
           || board[3 * (y / 3) + j / 3][3 * (x / 3) + (j % 3)] == c // Box
       )
       {
-        goto end;
+        valid = false;
+        break;
       }
     }
-    solves[y][x].push_back(c);
-  end:
+    if (valid)
+    {
+      solves[y][x].push_back(c);
+    }
     // Iterate character
     c = (c == '9' ? '1' : c + 1);
   }

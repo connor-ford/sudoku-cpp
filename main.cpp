@@ -12,46 +12,50 @@ int main(int, char **)
   menu += "[0] Exit\n";
   menu += "Select an option: ";
   int option;
-menu:
-  std::cout << menu;
-  std::cin >> option;
-  std::cout << '\n';
-  // Validates input as integer
-  if (std::cin.fail())
+  while (1)
   {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Invalid input.\n\n";
-    goto menu;
-  }
-  // Runs corresponding option
-  switch (option)
-  {
-  case 1: // Generate new
-    sudoku.fill(time(NULL));
-    std::cout << sudoku.print();
-    break;
-  case 2: // Import from terminal
-  importTerm:
-    std::cout << "Enter puzzle string: ";
-    std::cin >> puzzle;
+    std::cout << menu;
+    std::cin >> option;
     std::cout << '\n';
-    if (sudoku.validatePuzzle(puzzle))
+    // Validates input as integer
+    if (std::cin.fail())
     {
-      sudoku.load(puzzle);
-      std::cout << sudoku.print();
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "Invalid input.\n\n";
+      continue;
     }
-    else
+    // Runs corresponding option
+    switch (option)
     {
-      std::cout << "Invalid puzzle string provided.\n\n";
-      goto importTerm;
+    case 1: // Generate new
+      sudoku.fill(time(NULL));
+      std::cout << sudoku.print() << '\n';
+      break;
+    case 2: // Import from terminal
+      while (1)
+      {
+        std::cout << "Enter puzzle string: ";
+        std::cin >> puzzle;
+        std::cout << '\n';
+        if (sudoku.validatePuzzle(puzzle))
+        {
+          sudoku.load(puzzle);
+          std::cout << sudoku.print() << '\n';
+          break;
+        }
+        else
+        {
+          std::cout << "Invalid puzzle string provided.\n\n";
+        }
+      }
+      break;
+    case 0:
+      return 0;
+    default:
+      std::cout << "Invalid option provided.\n\n";
+      continue;
     }
-    break;
-  case 0:
     return 0;
-  default:
-    std::cout << "Invalid option provided.\n\n";
-    goto menu;
   }
-  return 0;
 }
