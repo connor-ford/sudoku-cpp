@@ -2,9 +2,12 @@
 #include <iostream>
 #include "sudoku.h"
 
-Sudoku::Sudoku() {
-  for (int y = 0; y < 9; y++) {
-    for (int x = 0; x < 9; x++) {
+Sudoku::Sudoku()
+{
+  for (int y = 0; y < 9; y++)
+  {
+    for (int x = 0; x < 9; x++)
+    {
       board[y][x] = 0;
       solves[y][x].clear();
     }
@@ -16,7 +19,6 @@ void Sudoku::check(int x, int y, char init)
   char c = init;
   for (int i = 0; i < 9; i++)
   {
-    bool works = true;
     for (int j = 0; j < 9; j++)
     {
       if (board[y][j] == c                                          // Horizontal
@@ -24,14 +26,11 @@ void Sudoku::check(int x, int y, char init)
           || board[3 * (y / 3) + j / 3][3 * (x / 3) + (j % 3)] == c // Box
       )
       {
-        works = false;
-        break;
+        goto end;
       }
     }
-    if (works)
-    {
-      solves[y][x].push_back(c);
-    }
+    solves[y][x].push_back(c);
+  end:
     // Iterate character
     c = (c == '9' ? '1' : c + 1);
   }
@@ -84,9 +83,12 @@ void Sudoku::fill(int seed)
   }
 }
 
-void Sudoku::clear() {
-  for (int y = 0; y < 9; y++) {
-    for (int x = 0; x < 9; x++) {
+void Sudoku::clear()
+{
+  for (int y = 0; y < 9; y++)
+  {
+    for (int x = 0; x < 9; x++)
+    {
       board[y][x] = 0;
       solves[y][x].clear();
     }
