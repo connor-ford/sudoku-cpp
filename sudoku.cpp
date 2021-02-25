@@ -84,6 +84,15 @@ void Sudoku::fill(int seed)
   }
 }
 
+void Sudoku::clear() {
+  for (int y = 0; y < 9; y++) {
+    for (int x = 0; x < 9; x++) {
+      board[y][x] = 0;
+      solves[y][x].clear();
+    }
+  }
+}
+
 std::string Sudoku::print()
 {
   std::string s = "\n";

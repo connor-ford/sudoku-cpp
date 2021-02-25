@@ -12,5 +12,6 @@ private:
 public:
   Sudoku(); // Init
   void fill(int seed); // Fills board
+  void clear(); // Clears board
   std::string print(); // Prints board
 };
