@@ -29,8 +29,31 @@ int main(int, char **)
     switch (option)
     {
     case 1: // Generate new
-      sudoku.fill(time(NULL));
-      std::cout << sudoku.print() << '\n';
+      while (1)
+      {
+        std::cout << "How many clues? (17-81): ";
+        std::cin >> option;
+        std::cout << '\n';
+        // Validates input as integer
+        if (std::cin.fail())
+        {
+          std::cin.clear();
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+          std::cout << "Invalid input.\n\n";
+          continue;
+        }
+        // Validates integer is within range
+        if (option < 17 || option > 81)
+        {
+          std::cin.clear();
+          std::cout << "Number of clues must be between 17-81.\n\n";
+          continue;
+        }
+        break;
+      }
+      sudoku.create(option);
+      std::cout << sudoku.print(true) << '\n';
+      std::cout << sudoku.print(false) << "\n\n";
       break;
     case 2: // Import from terminal
       while (1)
@@ -42,11 +65,11 @@ int main(int, char **)
         {
           sudoku.load(puzzle);
           std::cout << "Puzzle:\n\n"
-                    << sudoku.print() << '\n';
+                    << sudoku.print(true) << '\n';
           if (sudoku.solve())
           {
             std::cout << "Solved Puzzle:\n\n"
-                      << sudoku.print() << '\n';
+                      << sudoku.print(true) << '\n';
           }
           else
           {
