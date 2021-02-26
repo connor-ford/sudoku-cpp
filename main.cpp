@@ -41,7 +41,17 @@ int main(int, char **)
         if (sudoku.validatePuzzle(puzzle))
         {
           sudoku.load(puzzle);
-          std::cout << sudoku.print() << '\n';
+          std::cout << "Puzzle:\n\n"
+                    << sudoku.print() << '\n';
+          if (sudoku.solve())
+          {
+            std::cout << "Solved Puzzle:\n\n"
+                      << sudoku.print() << '\n';
+          }
+          else
+          {
+            std::cout << "Could not solve the Puzzle.\n\n";
+          }
           break;
         }
         else

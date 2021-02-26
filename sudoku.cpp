@@ -123,6 +123,63 @@ std::string Sudoku::print()
   return s;
 }
 
+bool Sudoku::solve()
+{
+  // Get blank squares in puzzle
+  for (int y = 0; y < 9; y++)
+  {
+    for (int x = 0; x < 9; x++)
+    {
+      if (board[y][x] == 0)
+      {
+        blanks.push_back(std::make_pair(x, y));
+      }
+    }
+  }
+  int y, x;
+  for (int i = 0; i < blanks.size(); i++)
+  {
+    x = blanks.at(i).first;
+    y = blanks.at(i).second;
+    // Get possible solutions for square
+    check(x, y, '1');
+    // If there is an available solution, use it
+    if (solves[y][x].size() > 0)
+    {
+      board[y][x] = solves[y][x].front();
+    }
+    else
+    {
+      while (true)
+      {
+        // Move to previous blank
+        i--;
+        // If no more possibilities
+        if (i < 0)
+        {
+          return false;
+        }
+        x = blanks.at(i).first;
+        y = blanks.at(i).second;
+        // If no more branches to try, delete possibilities
+        if (solves[y][x].size() < 2)
+        {
+          board[y][x] = 0;
+          solves[y][x].clear();
+        }
+        else
+        {
+          break;
+        }
+      }
+      // Delete current branch and try the next one
+      solves[y][x].pop_front();
+      board[y][x] = solves[y][x].front();
+    }
+  }
+  return true;
+}
+
 bool Sudoku::validatePuzzle(std::string s)
 {
   if (s.length() != 81)
