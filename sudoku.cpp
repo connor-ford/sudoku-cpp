@@ -58,29 +58,44 @@ void Sudoku::create(int clues)
   fill(time(NULL));
   int inc, x, y, sols;
   char c;
-  for (int i = 0; i < 81 - clues; i++)
-  {
-    inc = rand() % 81;
-    for (int j = 0; j < 81; j++)
-    {
-      inc = (inc == 80 ? 0 : inc + 1);
-      x = inc % 9;
-      y = inc / 9;
+  createHole(81 - clues);
+}
 
-      if (board[y][x] == 0)
-      {
-        continue;
-      }
-      c = board[y][x];
-      board[y][x] = 0;
-      sols = numOfSols();
-      if (sols != 1)
-      {
-        board[y][x] = c;
-      }
-      break;
-    }
+bool Sudoku::createHole(int remainingHoles)
+{
+  if (remainingHoles == 0)
+  {
+    return true;
   }
+  int x, y, inc = rand() % 81;
+  char c;
+  for (int i = 0; i < 81; i++)
+  {
+    inc = (inc == 80 ? 0 : inc + 1);
+    x = inc % 9;
+    y = inc / 9;
+
+    if (board[y][x] == 0)
+    {
+      continue;
+    }
+    c = board[y][x];
+    board[y][x] = 0;
+    if (numOfSols() != 1)
+    {
+      board[y][x] = c;
+      continue;
+    }
+    std::cout << "Y: " << y << " X: " << x << " Remaining Holes: " << remainingHoles << '\n';
+
+    if (!createHole(remainingHoles - 1))
+    {
+      board[y][x] = c;
+      continue;
+    }
+    return true;
+  }
+  return false;
 }
 
 void Sudoku::fill(int seed)
@@ -160,42 +175,16 @@ int Sudoku::numOfSols()
     // Get possible solutions for square
     check(x, y, '1');
     // If there is an available solution, use it
-    if (solves[y][x].size() > 0)
+    if (solves[y][x].size() > 0 && i + 1 != blanks.size())
     {
       board[y][x] = solves[y][x].front();
     }
     else
     {
-      board[y][x] = 0;
-      while (1)
+      if (i + 1 == blanks.size())
       {
-        board[y][x] = 0;
-        // Move to previous blank
-        i--;
-        // If no more possibilities
-        if (i < 0)
-        {
-          return sols;
-        }
-        x = blanks.at(i).first;
-        y = blanks.at(i).second;
-        // If no more branches to try, delete possibilities
-        if (solves[y][x].size() < 2)
-        {
-          board[y][x] = 0;
-          solves[y][x].clear();
-        }
-        else
-        {
-          break;
-        }
+        sols++;
       }
-      // Delete current branch and try the next one
-      solves[y][x].pop_front();
-      board[y][x] = solves[y][x].front();
-    }
-    if (i + 1 == blanks.size())
-    {
       solves[y][x].clear();
       board[y][x] = 0;
       while (1)
@@ -314,7 +303,7 @@ bool Sudoku::solve()
   return true;
 }
 
-bool Sudoku::validatePuzzle(std::string s)
+bool Sudoku::validatePuzzleString(std::string s)
 {
   if (s.length() != 81)
   {

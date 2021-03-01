@@ -52,7 +52,8 @@ int main(int, char **)
         break;
       }
       sudoku.create(option);
-      std::cout << sudoku.print(true) << '\n';
+      std::cout << '\n'
+                << sudoku.print(true) << '\n';
       std::cout << sudoku.print(false) << "\n\n";
       break;
     case 2: // Import from terminal
@@ -61,11 +62,12 @@ int main(int, char **)
         std::cout << "Enter puzzle string: ";
         std::cin >> puzzle;
         std::cout << '\n';
-        if (sudoku.validatePuzzle(puzzle))
+        if (sudoku.validatePuzzleString(puzzle))
         {
           sudoku.load(puzzle);
           std::cout << "Puzzle:\n\n"
                     << sudoku.print(true) << '\n';
+          std::cout << "Number of solves: " << sudoku.numOfSols() << "\n\n";
           if (sudoku.solve())
           {
             std::cout << "Solved Puzzle:\n\n"
